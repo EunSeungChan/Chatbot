@@ -1,5 +1,7 @@
 from flask import Flask
 import random
+import requests
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -30,22 +32,26 @@ def menu():
 
 @app.route('/lotto')
 def lotto():
+    result= []
     winner = []
     url = 'https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=873'
     response = requests.get(url)
     res_dict = response.json()
 
-    result= random.sample(range(1,46),6)
+    
+    for i in range(1,7):
+        winner.append(res_dict[f'drwtNo{i}'])
+        
+    result = random.sample(range(1,46),6)
+
+    
 
     
 
     #result = [3,5,12,13,14,15]
     cnt = len(set(winner) & set(result))
 
-    cnt = 0
-    for num in result:
-        if num in winner:
-            cnt += 1
+  
 
     rank = '꽝'
     if cnt ==6:
